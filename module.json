@@ -1,0 +1,27 @@
+{
+    "id": "smart-icons",
+    "title": "Smart Icons",
+    "description": "Module that helps GMs intelligently assign icons to items and actors by analyzing their names and matching them with available icon assets, using a scoring system to find the most relevant icons based on direct, partial, and fuzzy matches.",
+    "version": "#{VERSION}#",
+    "compatibility": {
+        "minimum": "12",
+        "verified": "12",
+        "maximum": "12"
+    },
+    "authors": [
+        {
+            "name": "Jorge",
+            "email": "jorge.e.felicio@gmail.com",
+            "url": "https://github.com/jofelicio",
+            "discord": "summorox"
+        }
+    ],
+    "esmodules": [
+        "scripts/smart-icons.js"
+    ],
+    "url": "#{URL}#",
+    "manifest": "#{MANIFEST}#",
+    "download": "#{DOWNLOAD}#",
+    "license": "LICENSE",
+    "readme": "README.md"
+}
