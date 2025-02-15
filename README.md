@@ -1,6 +1,6 @@
 # Smart Icons
 ### Description
-This module allows GMs to intelligently assign icons to items and actors based on their names. By scanning the icons directory and compendium entries, it intelligently matches assets using a weighted scoring system, considering direct, partial, and fuzzy matches. The module adds a button to the item sheet for manual selection of the matched icons, and a button to the actor sheet that does batch processing for all the items of that actor.
+This module allows GMs to intelligently assign icons to items and actors based on their names. By scanning the icons directory and compendium entries, it intelligently matches assets using a weighted scoring system, considering direct, partial, and fuzzy matches. The module adds a button to the item sheet for manual selection of the matched icons, and a button to the actor sheet that does batch processing for all the items of that actor. This should work for most systems (Tested DnD5e, WFRP4e COC7e) that have any items with visible images.
 
 ### 📜Features
 - Automatic Icon Matching: Finds the most relevant icons based on item and actor names.
