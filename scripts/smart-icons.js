@@ -1,7 +1,57 @@
 import { SMART_ICONS, STOP_WORDS, SCORING, COMPENDIUM_SCORING } from "./config.js";
 
+const FilePickerV1 = foundry.applications.apps.FilePicker.implementation;
+
+/**
+ * Attaches the Smart Icons button to the header of relevant application windows.
+ */
+function attachHeaderButton(app, buttons) {
+    if (!game.user.isGM || !app.document) return;
+
+    const docName = app.document.documentName;
+    if (docName !== 'Actor' && docName !== 'Item') return;
+
+    const activateSmartIcons = ev => {
+        try {
+            if (!SMART_ICONS.ready) {
+                ui.notifications.error("Smart Icons are still initializing. Please try again.");
+                return;
+            }
+
+            if (app.document.documentName === 'Item') {
+                openIconPicker(app.document);
+            } else if (app.document.documentName === 'Actor') {
+                batchSetIcons(app.document);
+            }
+        } catch (err) {
+            console.error("Smart Icons | Error during button click activation:", err);
+            ui.notifications.error("An error occurred. See the console (F12) for details.");
+        }
+    };
+
+    const buttonConfig = {
+        label: "Smart Icons",
+        title: docName === 'Item' ? "Assign a smart icon to this item" : "Batch assign smart icons to all items",
+        class: "smart-icons-button",
+        icon: "fas fa-images",
+        onclick: activateSmartIcons,
+        onClick: activateSmartIcons 
+    };
+
+    buttons.unshift(buttonConfig);
+}
+
+
 Hooks.once("init", async function () {
     console.log("Initializing Smart Icons...");
+
+    const watchedHooks = ['ActorSheet', 'ItemSheet'];
+    watchedHooks.forEach(hook => {
+        Hooks.on(`get${hook}HeaderButtons`, attachHeaderButton);
+    });
+
+    Hooks.on('getHeaderControlsApplicationV2', attachHeaderButton);
+
     try {
         await preloadIcons();
         SMART_ICONS.ready = true;
@@ -11,41 +61,6 @@ Hooks.once("init", async function () {
         SMART_ICONS.ready = false;
     }
 });
-// Button for individual item sheets (For individual icon assignment).
-Hooks.on("getItemSheetHeaderButtons", (app, buttons) => {
-    if (!game.user.isGM) return; // Restrict to GMs only
-
-    buttons.unshift({
-        label: "Smart Icons",
-        class: "custom-header-button",
-        icon: "fas fa-images",
-        onclick: () => {
-            if (!SMART_ICONS.ready) {
-                ui.notifications.error("Smart Icons are still initializing. Please try again.");
-                return;
-            }
-            openIconPicker(app.document);
-        }
-    });
-});
-
-// Button for Acto sheets (For batch icon assignment).
-Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
-    if (!game.user.isGM) return; // Restrict to GMs only
-
-    buttons.unshift({
-        label: "Smart Icons",
-        class: "custom-header-button",
-        icon: "fas fa-images",
-        onclick: () => {
-            if (!SMART_ICONS.ready) {
-                ui.notifications.error("Smart Icons are still initializing. Please try again.");
-                return;
-            }
-            batchSetIcons(app.document);
-        }
-    });
-});
 
 //Scan content of the icons directory and populate SMART_ICONS with keywords for each file name..
 async function preloadIcons() {
@@ -53,8 +68,8 @@ async function preloadIcons() {
     const ignoredPaths = new Set(["icons/svg", "icons/dice", "icons/pings"]);
 
     async function scanDirectory(path, isBaseLevel = false) {
-        const files = await FilePicker.browse("public", path);
-        if (ignoredPaths.has(path)) return; 
+        const files = await FilePickerV1.browse("public", path);
+        if (ignoredPaths.has(path)) return;
 
         if (!isBaseLevel) {
             files.files.forEach(file => {
@@ -145,7 +160,7 @@ async function batchSetIcons(actor) {
             return;
         }
         const item = items[index++];
-        openIconPicker(item, processNext, processNext);
+        openIconPicker(item, processNext, true);
     }
 
     if (items.length > 0) {
@@ -167,7 +182,6 @@ async function findBestMatchingIcons(itemName) {
         .filter(word => word && !STOP_WORDS.has(word));
 
     const scores = [];
-   
     // Include compendium matches
     const compendiumIcons = await findCompendiumIcon(itemName);
     if (compendiumIcons) {
@@ -273,9 +287,9 @@ function levenshtein(a, b) {
         for (let j = 1; j <= a.length; j++) {
             const cost = a[j - 1] === b[i - 1] ? 0 : 1;
             matrix[i][j] = Math.min(
-                matrix[i - 1][j] + 1,     
-                matrix[i][j - 1] + 1,     
-                matrix[i - 1][j - 1] + cost 
+                matrix[i - 1][j] + 1,
+                matrix[i][j - 1] + 1,
+                matrix[i - 1][j - 1] + cost
             );
         }
     }
