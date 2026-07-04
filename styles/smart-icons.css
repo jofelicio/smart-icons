@@ -1,0 +1,67 @@
+.smart-icons-iconHTML {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 50px);
+  gap: 5px;
+  max-width: 385px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 5px;
+}
+
+.smart-icons-iconHTML img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 4px;
+}
+
+.smart-icons-iconHTML img:hover {
+  border-color: #ff6400;
+}
+
+.smart-icons-iconHTML img.selectedIcon {
+  border-color: #00ff00;
+  box-shadow: 0 0 5px #00ff00;
+}
+
+.smart-icons-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.smart-icons-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+}
+
+.smart-icons-tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 2px;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.smart-icons-tag button:hover {
+  opacity: 1;
+}
+
+.smart-icons-tag-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 12px;
+  min-width: 80px;
+  padding: 2px 4px;
+}

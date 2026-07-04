@@ -20,9 +20,5 @@ export const SCORING = {
 
 // Scoring values for compendium icon matches.
 export const COMPENDIUM_SCORING = {
-    EXACT: 30,     // Exact name match
-    PARTIAL: 20,   // Partial name match
-    BASE: 20,      // Base fuzzy score before adjustment
-    MIN: 15       // Minimum score for an entry to be considered
+    BONUS: 30,
 };
-
